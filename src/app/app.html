@@ -1,0 +1,23 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>Capture Selfie</span>
+  <span class="toolbar-spacer"></span>
+</mat-toolbar>
+
+<div class="face-container">
+  <video #video autoplay playsinline muted [hidden]="captured"></video>
+  <div class="circle-overlay" [hidden]="captured">
+    <div class="progress-ring"></div>
+    <div class="instruction-text">Position your face within the circle</div>
+  </div>
+
+  <div class="controls-container" [hidden]="captured">
+    <button mat-fab color="primary" class="capture-button">
+      <mat-icon>camera</mat-icon>
+    </button>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
