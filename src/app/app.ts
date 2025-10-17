@@ -21,13 +21,7 @@ import { RouterOutlet } from '@angular/router';
 export class App {
   @ViewChild('video', { static: false })
   videoRef!: ElementRef<HTMLVideoElement>;
-
-  @ViewChild('canvas', { static: false })
-  canvasRef!: ElementRef<HTMLCanvasElement>;
-
   captured = false;
-  capturedImage: string | null = null;
-  private stream: MediaStream | null = null;
 
   ngAfterViewInit() {
     this.startCamera();
@@ -44,6 +38,7 @@ export class App {
     }
   }
 
+<<<<<<< HEAD
   // captureFace() {
   //   this.captured = true;
   // }
@@ -114,4 +109,13 @@ export class App {
       this.stream = null;
     }
   }
+=======
+  captureFace() {
+    this.captured = true;
+  }
+
+  retake() {
+    this.captured = false;
+  }
+>>>>>>> parent of 5a2802f (captures image but buggy)
 }

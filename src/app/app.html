@@ -8,28 +8,16 @@
 
 <div class="face-container">
   <video #video autoplay playsinline muted [hidden]="captured"></video>
-  <!-- <div class="circle-overlay" [hidden]="captured"> -->
-  <!-- <div class="focus-ring"></div> -->
-  <!-- <div class="instruction-text">Position your face within the circle</div> -->
-  <!-- </div> -->
-
-  <div class="preview-container" [hidden]="!captured">
-    <img [src]="capturedImage" alt="Captured selfie" class="preview-image" />
+  <div class="circle-overlay" [hidden]="captured">
+    <div class="progress-ring"></div>
+    <div class="instruction-text">Position your face within the circle</div>
   </div>
 
   <div class="controls-container" [hidden]="captured">
-    <button
-      mat-fab
-      color="primary"
-      class="capture-button"
-      (click)="captureFace()"
-    >
+    <button mat-fab color="primary" class="capture-button">
       <mat-icon>camera</mat-icon>
     </button>
   </div>
-
-  <!-- Hidden Canvas for Image Processing -->
-  <canvas #canvas style="display: none"></canvas>
 </div>
 
 <router-outlet></router-outlet>
