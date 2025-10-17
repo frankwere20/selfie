@@ -35,91 +35,83 @@ export class App {
 
   async startCamera() {
     try {
-      // Stop existing stream if any
-      if (this.stream) {
-        this.stream.getTracks().forEach(track => track.stop());
-      }
-
-      this.stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: 'user', // Front camera for selfie
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        }
-      });
-
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (this.videoRef.nativeElement) {
-        this.videoRef.nativeElement.srcObject = this.stream;
+        this.videoRef.nativeElement.srcObject = stream;
       }
     } catch (err) {
       console.error('Camera access error:', err);
     }
   }
 
-  captureImage() {
+  // captureFace() {
+  //   this.captured = true;
+  // }
+
+  captureFace() {
     const video = this.videoRef.nativeElement;
     const canvas = this.canvasRef.nativeElement;
 
-    // Set canvas dimensions to match video
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = 300;
+    canvas.height = 300;
 
     const context = canvas.getContext('2d');
-    if (context) {
-      // Draw the current video frame to canvas
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    if (context && video.videoWidth > 0) {
+      const videoRect = video.getBoundingClientRect();
+      const overlayRect = {
+        left: (window.innerWidth - 340) / 2,
+        top: window.innerHeight * 0.2,
+      };
 
-      // Convert canvas to data URL (JPEG format)
+      // Calculate the scale between video element and actual video dimensions
+      const scaleX = video.videoWidth / videoRect.width;
+      const scaleY = video.videoHeight / videoRect.height;
+
+      // Calculate the focus ring position in video coordinates
+      const focusRingX = (overlayRect.left - videoRect.left) * scaleX + 20; // 20px padding for 340px->300px
+      const focusRingY = (overlayRect.top - videoRect.top) * scaleY + 20;
+      const focusRingSize = 300 * Math.min(scaleX, scaleY); // 300px focus ring size
+
+      // Clear canvas and create circular clipping path
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.beginPath();
+      context.arc(150, 150, 150, 0, 2 * Math.PI); // Center at 150,150 with radius 150
+      context.closePath();
+      context.clip();
+
+      // Draw only the focus ring area from the video
+      context.drawImage(
+        video,
+        focusRingX,
+        focusRingY, // Source X, Y (focus ring position in video)
+        focusRingSize,
+        focusRingSize, // Source width, height (focus ring size in video)
+        0,
+        0, // Destination X, Y
+        300,
+        300 // Destination width, height
+      );
+
+      // Convert to data URL and update state
       this.capturedImage = canvas.toDataURL('image/jpeg');
-
-      // Set captured flag to true
       this.captured = true;
+      console.log('this is the image: ', this.capturedImage);
 
-      // Stop camera stream to save resources
+      // Stop camera stream
       this.stopCamera();
     }
   }
 
+  retake() {
+    this.captured = false;
+  }
+
   stopCamera() {
     if (this.stream) {
-      this.stream.getTracks().forEach(track => {
+      this.stream.getTracks().forEach((track) => {
         track.stop();
       });
       this.stream = null;
     }
-  }
-
-  retake() {
-    // Reset captured state
-    this.captured = false;
-    this.capturedImage = null;
-
-    // Restart camera
-    this.startCamera();
-  }
-
-  saveImage() {
-    if (this.capturedImage) {
-      // Here you can implement the save functionality
-      console.log('Saving image:', this.capturedImage);
-
-      // Example: Download the image
-      this.downloadImage(this.capturedImage);
-
-      // Or send to backend
-      // this.uploadToBackend(this.capturedImage);
-    }
-  }
-
-  private downloadImage(dataUrl: string) {
-    const link = document.createElement('a');
-    link.download = 'selfie.jpg';
-    link.href = dataUrl;
-    link.click();
-  }
-
-  ngOnDestroy() {
-    // Clean up when component is destroyed
-    this.stopCamera();
   }
 }
