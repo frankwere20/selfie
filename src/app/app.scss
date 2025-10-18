@@ -25,98 +25,62 @@
   left: 0;
 }
 
+// UPDATED BLUR OVERLAY - Complete blur with oval cutout
 .blur-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-}
 
-.blur-section {
-  backdrop-filter: blur(8px);
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.blur-top {
-  height: 30%;
-  width: 100%;
-}
-
-.blur-bottom {
-  height: 40%;
-  width: 100%;
-}
-
-.blur-center {
-  display: flex;
-  flex: 1;
-  width: 100%;
-}
-
-.blur-left,
-.blur-right {
-  width: 10%;
+  // Create oval cutout using CSS mask
+  mask: radial-gradient(
+    ellipse 140px 180px at center,
+    transparent 50%,
+    black 51%
+  );
+  -webkit-mask: radial-gradient(
+    ellipse 140px 180px at center,
+    transparent 50%,
+    black 51%
+  );
 }
 
 .guide-frame {
-  flex: 1;
-  position: relative;
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  margin: 0 auto;
-  // aspect-ratio: ;
-  // max-width: 80%;
-  // max-height: 100%;
-}
-
-.guide-corner {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 4px solid #0034aa;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  height: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; // Allow clicks to pass through
 }
 
-.top-left {
-  top: -2px;
-  left: -2px;
-  border-right: none;
-  border-bottom: none;
-}
-
-.top-right {
-  top: -2px;
-  right: -2px;
-  border-left: none;
-  border-bottom: none;
-}
-
-.bottom-left {
-  bottom: -2px;
-  left: -2px;
-  border-right: none;
-  border-top: none;
-}
-
-.bottom-right {
-  bottom: -2px;
-  right: -2px;
-  border-left: none;
-  border-top: none;
+.face-guide-oval {
+  width: 280px;
+  height: 360px;
+  border: 3px solid #00ff88;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: transparent;
+  position: relative;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
 }
 
 .guide-text {
   position: absolute;
   top: 5%;
-  left: 10%;
-  right: 10%;
+  left: 5%;
+  right: 5%;
   text-align: center;
   color: white;
   font-size: 18px;
   padding: 12px;
   line-height: 1.3;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  z-index: 2;
 }
 
 .preview-canvas {
@@ -153,5 +117,38 @@
 @media (max-width: 599px) {
   .scanner-container {
     height: calc(100vh - 56px);
+  }
+
+  // Adjust oval size for mobile
+  .guide-frame {
+    width: 240px;
+    height: 310px;
+  }
+
+  .blur-overlay {
+    mask: radial-gradient(
+      ellipse 120px 155px at center,
+      transparent 50%,
+      black 51%
+    );
+    -webkit-mask: radial-gradient(
+      ellipse 120px 155px at center,
+      transparent 50%,
+      black 51%
+    );
+  }
+}
+
+// Hide guide elements when image is captured
+.scanner-container:has(.preview-canvas:not([hidden])) {
+  .face-guide-oval {
+    display: none;
+  }
+
+  .blur-overlay {
+    backdrop-filter: none;
+    background-color: transparent;
+    mask: none;
+    -webkit-mask: none;
   }
 }
