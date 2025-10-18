@@ -73,7 +73,7 @@
   position: absolute;
   top: 5%;
   left: 5%;
-  right: 5%;
+  right: 10%;
   text-align: center;
   color: white;
   font-size: 18px;
@@ -94,7 +94,7 @@
 
 .controls-container {
   position: fixed;
-  bottom: 32px;
+  bottom: 3px;
   left: 0;
   right: 0;
   display: flex;
@@ -106,7 +106,7 @@
 
 .button-group {
   display: flex;
-  gap: 16px;
+  gap: 32px;
 }
 
 .capture-button {

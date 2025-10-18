@@ -45,8 +45,7 @@ export class App {
         audio: false,
         video: {
           facingMode: 'user',
-          aspectRatio: 4 / 3,
-          autoGainControl: true,
+          aspectRatio: 1 / 1,
         },
       });
 
@@ -57,6 +56,9 @@ export class App {
       this.snackBar.open('Camera access denied', 'Close', {
         duration: 3000,
       });
+      setTimeout(() => {
+        window.location.reload();
+      }, 15000);
     }
   }
 
