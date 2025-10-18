@@ -1,10 +1,47 @@
+/* Ensure no default margins/padding */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000; /* Match your app's background */
+}
+
+/* Make sure router-outlet isn't causing issues */
+router-outlet {
+  display: none;
+}
+
+.transparent-toolbar {
+  background: transparent !important;
+  color: black !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.transparent-toolbar .tittle-text {
+  color: white !important;
+}
+
+.transparent-toolbar .mat-icon {
+  color: white !important;
+}
+
+.transparent-toolbar button {
+  color: white !important;
+}
+
 .toolbar-spacer {
   flex: 1 1 auto;
 }
 
+/* FIX: Remove the -64px calculation since toolbar is absolute */
 .face-container {
   position: relative;
-  height: calc(100vh - 64px);
+  height: 100vh; /* Changed from calc(100vh - 64px) */
   width: 100%;
   overflow: hidden;
   display: flex;
@@ -40,7 +77,7 @@ video {
 
 .instruction-text {
   position: absolute;
-  top: -120px;
+  bottom: -120px;
   left: 50%;
   transform: translateX(-50%);
   color: white;
@@ -72,4 +109,10 @@ video {
   width: 32px;
   height: 32px;
   color: #1976d2;
+}
+
+/* Optional: Add a body background to ensure no white space */
+body {
+  margin: 0;
+  background: #000; /* Or whatever matches your design */
 }
