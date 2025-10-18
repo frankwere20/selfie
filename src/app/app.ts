@@ -44,7 +44,7 @@ export class App {
       this.stream = await navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
-          facingMode: 'environment',
+          facingMode: 'user',
           aspectRatio: 4 / 3,
           autoGainControl: true,
         },
