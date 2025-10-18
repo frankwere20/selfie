@@ -1,22 +1,71 @@
-<mat-toolbar class="transparent-toolbar">
-  <button mat-icon-button>
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span class="tittle-text">Capture Selfie</span>
+<mat-toolbar color="primary">
+  <span>Scan Document</span>
   <span class="toolbar-spacer"></span>
+  <button mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
 </mat-toolbar>
 
-<div class="face-container">
-  <video #video autoplay playsinline muted [hidden]="captured"></video>
-  <div class="circle-overlay" [hidden]="captured">
-    <div class="progress-ring"></div>
-    <div class="instruction-text">Position your face within the circle</div>
+<div class="scanner-container">
+  <!-- Video Feed -->
+  <video
+    #video
+    [hidden]="capturedImage"
+    autoplay
+    playsinline
+    class="camera-feed"
+  ></video>
+
+  <!-- Blur Overlay -->
+  <div class="blur-overlay" [hidden]="capturedImage">
+    <!-- Top blur section -->
+    <div class="blur-section blur-top"></div>
+    <!-- Center section with left and right blur -->
+    <div class="blur-center">
+      <div class="blur-section blur-left"></div>
+      <div class="guide-frame">
+        <!-- Guide corners -->
+        <div class="guide-corner top-left"></div>
+        <div class="guide-corner top-right"></div>
+        <div class="guide-corner bottom-left"></div>
+        <div class="guide-corner bottom-right"></div>
+      </div>
+      <div class="blur-section blur-right"></div>
+    </div>
+    <!-- Bottom blur section -->
+    <div class="blur-section blur-bottom"></div>
+
+    <div class="guide-text">
+      Position your phone in portrait mode & fit the
+      <span><strong>FRONT</strong></span> of your ID within the frame
+    </div>
   </div>
 
-  <div class="controls-container" [hidden]="captured">
-    <button mat-fab color="primary" class="capture-button">
+  <!-- Preview Canvas -->
+  <canvas #canvas [hidden]="!capturedImage" class="preview-canvas"> </canvas>
+
+  <!-- Hidden canvas for frame capture -->
+  <canvas #frameCanvas style="display: none"></canvas>
+
+  <!-- Controls -->
+  <div class="controls-container">
+    @if (!capturedImage) {
+    <button
+      mat-fab
+      color="primary"
+      (click)="captureImage()"
+      class="capture-button"
+    >
       <mat-icon>camera</mat-icon>
     </button>
+    } @if (capturedImage) {
+    <div class="button-group">
+      <button mat-raised-button color="warn" (click)="retake()">Retake</button>
+      <button mat-raised-button color="primary" (click)="sendImage()">
+        Send
+      </button>
+    </div>
+    }
   </div>
 </div>
 
